@@ -46,5 +46,6 @@ func dispServes(c net.Conn) {
 
 	//必须的close 之后 才能响应到浏览器
 	c.Close()
+	//update
 
 }
