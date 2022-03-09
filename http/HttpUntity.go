@@ -39,7 +39,7 @@ func EncodingBase64String(str string) []byte {
 
 }
 
-//编码
+// 计算key 
 func (t *HttpUntity) EncodeSecWebsocketKey(req_scr_key string) string {
 	//guid := tsgutils.GUID()
 	fmt.Println("target", req_scr_key)
