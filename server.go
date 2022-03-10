@@ -8,9 +8,12 @@ import (
 
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
-func main() {
+type Hwebsocket struct{}
 
-	conn, err := net.Listen("tcp", ":800")
+func (h Hwebsocket) startServer(port string) {
+
+	conn, err := net.Listen("tcp", port)
+
 	if err != nil {
 		panic(err)
 	}
@@ -21,11 +24,13 @@ func main() {
 
 		}
 		fmt.Println("收到请求")
-		go dispServes(cli)
+		go h.dispServes(cli)
 	}
 }
 
-func dispServes(c net.Conn) {
+func (h Hwebsocket) dispServes(c net.Conn) {
+
+	defer c.Close()
 
 	Https := make([]byte, 1024)
 	c.Read(Https)
@@ -39,13 +44,21 @@ func dispServes(c net.Conn) {
 	ResponseString := "HTTP/1.1 101 Switching Protocols \r\n"
 	ResponseString += "Upgrade: websocket \r\n"
 	ResponseString += "Connection: Upgrade \r\n"
-	ResponseString += "Sec-WebSocket-Accept:" + Sce_Rpaly_Key + "\r\n"
-	ResponseString += "Sec-WebSocket-Protocol: chat \r\n"
-
+	ResponseString += "Sec-WebSocket-Accept: " + Sce_Rpaly_Key + "\r\n"
+	//ResponseString += "Sec-WebSocket-Protocol: chat"
+	ResponseString += "\r\n"
+	fmt.Println(ResponseString)
 	c.Write([]byte(ResponseString))
 
+	for {
+
+		Mes := make([]byte, 128)
+		c.Read(Mes)
+		fmt.Println(Mes[1] & 15)
+
+		//c.Write(nes)
+	}
 	//必须的close 之后 才能响应到浏览器
-	c.Close()
-	//update
+	c.Write([]byte("a \r\n"))
 
 }

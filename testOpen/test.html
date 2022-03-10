@@ -11,16 +11,17 @@
         console.log("asdsa")
         var socket=new WebSocket('ws://127.0.0.1:800')
         socket.onopen=function(){
-            alert("链接成功")
-            console.log("登录成功")
+            alert("链接成功") 
 
-            socket.send("zhangsan,..s")
+            socket.send("1123")
         }
         socket.close=function(){
             alert("断开了链接")
         }
         socket.onmessage=function(res){
+            console.log(res.data)
             console.log("收到消息了")
+
         }
         socket.onerror=function(){
             alert("出错了")

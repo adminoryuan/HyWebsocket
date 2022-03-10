@@ -34,12 +34,7 @@ func (t *HttpUntity) AnalyHttp(reqByte []byte) map[string]string {
 	return HtMaps
 }
 
-func EncodingBase64String(str string) []byte {
-	return []byte("")
-
-}
-
-// 计算key 
+// 计算key
 func (t *HttpUntity) EncodeSecWebsocketKey(req_scr_key string) string {
 	//guid := tsgutils.GUID()
 	fmt.Println("target", req_scr_key)
@@ -47,6 +42,7 @@ func (t *HttpUntity) EncodeSecWebsocketKey(req_scr_key string) string {
 	req_scr_key = strings.ReplaceAll(req_scr_key, " ", "")
 	req_scr_key = strings.ReplaceAll(req_scr_key, "0x00", "")
 	req_scr_key = req_scr_key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+
 	s := sha1.New()
 	s.Write([]byte(req_scr_key))
 	newSck := s.Sum(nil)
