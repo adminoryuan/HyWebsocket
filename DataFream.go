@@ -24,14 +24,8 @@ type DataFream struct {
 
 	Makeing_Key string //消息掩码
 
-	PlayLoadData  []byte
-	ExtensionData []byte
-}
-
-//将byte 数组转换为int
-func ByteArrayToint(n []byte) uint32 {
-
-	return TextMeg
+	PlayLoadData  []byte //消息载体 消息体和扩展数据
+	ExtensionData []byte //扩展数据
 }
 
 //解析数据帧
@@ -47,10 +41,10 @@ func DecodeDataFream(meg []byte) DataFream {
 	d.PayLoadLenth = (meg[index] << 1)
 	index += 1
 	if d.PayLoadLenth == 126 {
-		d.ExtenDedPayLoadLen = int64(ByteArrayToint(meg[index : index+2]))
+		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+2]))
 		index += 2
 	} else if d.PayLoadLenth == 128 {
-		d.ExtenDedPayLoadLen = int64(ByteArrayToint(meg[index : index+4]))
+		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+4]))
 		index += 4
 	}
 	if d.Mask == 1 {
