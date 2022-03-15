@@ -10,7 +10,7 @@ var HttpUntity http.HttpUntity = http.HttpUntity{}
 
 type Hwebsocket struct{}
 
-func (h Hwebsocket) startServer(port string) {
+func (h *Hwebsocket) startServer(port string) {
 
 	conn, err := net.Listen("tcp", port)
 
@@ -28,7 +28,7 @@ func (h Hwebsocket) startServer(port string) {
 	}
 }
 
-func (h Hwebsocket) dispServes(c net.Conn) {
+func (h *Hwebsocket) dispServes(c net.Conn) {
 
 	defer c.Close()
 
@@ -54,7 +54,8 @@ func (h Hwebsocket) dispServes(c net.Conn) {
 
 		Mes := make([]byte, 128)
 		c.Read(Mes)
-		fmt.Println(Mes[1] & 15)
+
+		DecodeDataFream(Mes)
 
 		//c.Write(nes)
 	}
