@@ -22,15 +22,16 @@ type DataFream struct {
 	PayLoadLenth       byte  //消息长度
 	ExtenDedPayLoadLen int64 //扩展长度
 
-	Makeing_Key string //消息掩码
+	Makeing_Key []byte //消息掩码
 
 	PlayLoadData  []byte //消息载体 消息体和扩展数据
 	ExtensionData []byte //扩展数据
+
 }
 
 //解析数据帧
 func DecodeDataFream(meg []byte) DataFream {
-
+	fmt.Println(meg)
 	index := 0
 	d := DataFream{}
 	d.Fin = meg[index] >> 7
@@ -38,8 +39,12 @@ func DecodeDataFream(meg []byte) DataFream {
 	d.OpCode = (meg[index] << 1) >> 1
 	index += 1
 	d.Mask = meg[index] >> 7
-	d.PayLoadLenth = (meg[index] << 1)
+	d.PayLoadLenth = (meg[index] << 1) >> 1
 	index += 1
+	fmt.Println("---")
+	fmt.Print(d.PayLoadLenth)
+	fmt.Println("--")
+
 	if d.PayLoadLenth == 126 {
 		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+2]))
 		index += 2
@@ -48,16 +53,18 @@ func DecodeDataFream(meg []byte) DataFream {
 		index += 4
 	}
 	if d.Mask == 1 {
-		d.Makeing_Key = string(meg[index : index+4])
+		fmt.Println("计算maskkey")
+		d.Makeing_Key = meg[index : index+4]
 		index += 4
 	}
-
-	fmt.Println(d.PayLoadLenth)
-	fmt.Println(d.ExtenDedPayLoadLen)
+	fmt.Println(d.Makeing_Key)
 	//有效负载数据
 	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+int(d.ExtenDedPayLoadLen))]
 
-	fmt.Println(string(d.PlayLoadData))
+	for i, _ := range d.PlayLoadData {
+		d.PlayLoadData[i] ^= d.Makeing_Key[i%4]
+	}
+
 	return d
 }
 

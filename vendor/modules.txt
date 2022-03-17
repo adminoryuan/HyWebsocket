@@ -1,0 +1,4 @@
+# github.com/typa01/go-utils v0.0.0-20181126045345-a86b05b01c1e
+## explicit
+# golang.org/x/text v0.3.7
+## explicit
