@@ -12,8 +12,12 @@
         var socket=new WebSocket('ws://127.0.0.1:8001')
         socket.onopen=function(){
             alert("链接成功") 
+            // for(var i=0;i<100;i++){
 
-            socket.send("1asdjlaksjdlkajsdlkjaslkdjaslkdjlkasjdlajsldkjslkdjlskja123")
+            // socket.send("你好")
+
+            // }
+            socket.send("你好")
         }
         socket.close=function(){
             alert("断开了链接")

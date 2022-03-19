@@ -2,6 +2,7 @@ package main
 
 import (
 	"Hywebsocket/http"
+	"context"
 	"fmt"
 	"net"
 )
@@ -28,14 +29,10 @@ func (h *Hwebsocket) startServer(port string) {
 	}
 }
 
-func (h *Hwebsocket) dispServes(c net.Conn) {
+//与客户端进行握手 返回握手包
+func (h *Hwebsocket) Handshake(https []byte) []byte {
 
-	defer c.Close()
-
-	Https := make([]byte, 1024)
-	c.Read(Https)
-
-	HttpMaps := HttpUntity.AnalyHttp(Https)
+	HttpMaps := HttpUntity.AnalyHttp(https)
 
 	//计算key
 	Sce_Rpaly_Key := HttpUntity.EncodeSecWebsocketKey(HttpMaps["Sec-WebSocket-Key"])
@@ -48,18 +45,27 @@ func (h *Hwebsocket) dispServes(c net.Conn) {
 	//ResponseString += "Sec-WebSocket-Protocol: chat"
 	ResponseString += "\r\n"
 	fmt.Println(ResponseString)
-	c.Write([]byte(ResponseString))
+	return []byte(ResponseString)
+}
+func (h *Hwebsocket) dispServes(c net.Conn) {
 
-	for {
+	//defer c.Close()
 
-		Mes := make([]byte, 128)
-		c.Read(Mes)
+	Hobj := NewDispMessage()
 
-		DecodeDataFream(Mes)
+	Ctx, cal := context.WithCancel(context.Background())
 
-		//c.Write(nes)
-	}
-	//必须的close 之后 才能响应到浏览器
-	c.Write([]byte("a \r\n"))
+	Hobj.Canle = cal
 
+	go Hobj.OnWrite(c, Ctx)
+
+	go Hobj.onRead(c, Ctx)
+
+	Https := make([]byte, 1024)
+
+	c.Read(Https)
+
+	ShakeMeg := h.Handshake(Https)
+
+	Hobj.Meg <- ShakeMeg
 }

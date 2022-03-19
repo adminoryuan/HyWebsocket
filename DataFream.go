@@ -41,9 +41,7 @@ func DecodeDataFream(meg []byte) DataFream {
 	d.Mask = meg[index] >> 7
 	d.PayLoadLenth = (meg[index] << 1) >> 1
 	index += 1
-	fmt.Println("---")
 	fmt.Print(d.PayLoadLenth)
-	fmt.Println("--")
 
 	if d.PayLoadLenth == 126 {
 		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+2]))
