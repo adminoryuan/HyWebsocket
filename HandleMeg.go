@@ -7,30 +7,29 @@ import (
 )
 
 type dispCliMessage struct {
-	Meg   chan []byte
-	Canle context.CancelFunc
+	codobj dataFreamCodeing
+	Meg    chan []byte
+	Canle  context.CancelFunc
 }
 
 func NewDispMessage() dispCliMessage {
+
 	d := dispCliMessage{}
+	d.codobj = NewDataFreamCoding()
 	d.Meg = make(chan []byte)
 	return d
 
 }
 func (d dispCliMessage) onRead(c io.Reader, ctx context.Context) {
+	Mes := make([]byte, 128)
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		default:
-
-			Mes := make([]byte, 128)
 			c.Read(Mes)
-
-			cliFream := DecodeDataFream(Mes)
-
+			cliFream := d.codobj.DecodeDataFream(Mes)
 			fmt.Printf(string(cliFream.PlayLoadData))
-
 		}
 		//c.Write(nes)
 	}

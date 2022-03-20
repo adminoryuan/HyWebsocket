@@ -19,8 +19,8 @@ type DataFream struct {
 
 	Mask byte //是否掩码
 
-	PayLoadLenth       byte  //消息长度
-	ExtenDedPayLoadLen int64 //扩展长度
+	PayLoadLenth       byte   //消息长度
+	ExtenDedPayLoadLen []byte //扩展长度
 
 	Makeing_Key []byte //消息掩码
 
@@ -29,8 +29,15 @@ type DataFream struct {
 
 }
 
+type dataFreamCodeing struct{}
+
+//返回一个编码对象
+func NewDataFreamCoding() dataFreamCodeing {
+	return dataFreamCodeing{}
+}
+
 //解析数据帧
-func DecodeDataFream(meg []byte) DataFream {
+func (c dataFreamCodeing) DecodeDataFream(meg []byte) DataFream {
 	fmt.Println(meg)
 	index := 0
 	d := DataFream{}
@@ -44,10 +51,10 @@ func DecodeDataFream(meg []byte) DataFream {
 	fmt.Print(d.PayLoadLenth)
 
 	if d.PayLoadLenth == 126 {
-		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+2]))
+		d.ExtenDedPayLoadLen = meg[index : index+2]
 		index += 2
 	} else if d.PayLoadLenth == 128 {
-		d.ExtenDedPayLoadLen = int64(BytesToInt(meg[index : index+4]))
+		d.ExtenDedPayLoadLen = meg[index : index+4]
 		index += 4
 	}
 	if d.Mask == 1 {
@@ -57,7 +64,7 @@ func DecodeDataFream(meg []byte) DataFream {
 	}
 	fmt.Println(d.Makeing_Key)
 	//有效负载数据
-	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+int(d.ExtenDedPayLoadLen))]
+	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+BytesToInt(d.ExtenDedPayLoadLen))]
 
 	for i, _ := range d.PlayLoadData {
 		d.PlayLoadData[i] ^= d.Makeing_Key[i%4]
@@ -66,7 +73,35 @@ func DecodeDataFream(meg []byte) DataFream {
 	return d
 }
 
-//生产数据帧
-func EnCodingDataFream() {
+//生产数据帧 将Datafream 结构体转换为数据帧
+func (c dataFreamCodeing) EnCodingDataFream(f DataFream) []byte {
+	Data := make([]byte, 0)
 
+	var HeadByte byte = 0b00000000
+	HeadByte = f.Fin
+	HeadByte = HeadByte << 7
+
+	//默认Rev为0
+
+	HeadByte |= f.OpCode
+
+	//头部帧 fin(1) Rev(*3) OpCode（4位）
+	Data = append(Data, HeadByte)
+
+	HeadByte = f.Mask
+	HeadByte |= f.PayLoadLenth
+
+	Data = append(Data, HeadByte)
+
+	if f.PayLoadLenth >= 126 {
+		Data = append(Data, f.ExtenDedPayLoadLen...)
+	}
+	if f.Mask == 1 {
+
+		Data = append(Data, f.Makeing_Key...)
+
+	}
+	Data = append(Data, f.PlayLoadData...)
+	Data = append(Data, f.ExtensionData...)
+	return Data
 }

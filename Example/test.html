@@ -24,7 +24,8 @@
         }
         socket.onmessage=function(res){
             console.log(res.data)
-            console.log("收到消息了")
+            alert(res.data)
+            console.log("收到   消息了")
 
         }
         socket.onerror=function(){

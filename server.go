@@ -68,4 +68,17 @@ func (h *Hwebsocket) dispServes(c net.Conn) {
 	ShakeMeg := h.Handshake(Https)
 
 	Hobj.Meg <- ShakeMeg
+
+	Writeshake := DataFream{}
+	Writeshake.Fin = 1
+	Writeshake.Rsv = true
+	Writeshake.OpCode = 0x01
+	Writeshake.PlayLoadData = []byte("你好啊张三")
+
+	Writeshake.PayLoadLenth = byte(len(Writeshake.PlayLoadData))
+
+	a := NewDataFreamCoding()
+	Hobj.Meg <- a.EnCodingDataFream(Writeshake)
+
+	Hobj.Meg <- a.EnCodingDataFream(Writeshake)
 }
