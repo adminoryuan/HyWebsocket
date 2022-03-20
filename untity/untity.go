@@ -1,4 +1,4 @@
-package main
+package untity
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 
 func IntToBytes(n int) []byte {
 	data := int64(n)
-		
+
 	bytebuf := bytes.NewBuffer([]byte{})
 	binary.Write(bytebuf, binary.BigEndian, data)
 	return bytebuf.Bytes()
