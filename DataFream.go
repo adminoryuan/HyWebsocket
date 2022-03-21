@@ -65,7 +65,7 @@ func (c dataFreamCodeing) DecodeDataFream(meg []byte) DataFream {
 		index += 4
 	}
 	fmt.Println(d.Makeing_Key)
-	//有效负载数据
+	//有效负载数据1
 	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+untity.BytesToInt(d.ExtenDedPayLoadLen))]
 
 	for i, _ := range d.PlayLoadData {
