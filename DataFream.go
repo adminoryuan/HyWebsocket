@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	untity "Hywebsocket/untity"
 )
 
 const (
@@ -64,7 +66,7 @@ func (c dataFreamCodeing) DecodeDataFream(meg []byte) DataFream {
 	}
 	fmt.Println(d.Makeing_Key)
 	//有效负载数据
-	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+BytesToInt(d.ExtenDedPayLoadLen))]
+	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+untity.BytesToInt(d.ExtenDedPayLoadLen))]
 
 	for i, _ := range d.PlayLoadData {
 		d.PlayLoadData[i] ^= d.Makeing_Key[i%4]
