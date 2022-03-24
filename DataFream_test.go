@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestDataFream() {
+func TestDataFream(t testing.T) {
 	//1
 	DataFreamByteTest := []byte{129, 132, 41, 84, 68, 132, 24, 101, 119, 183}
 
