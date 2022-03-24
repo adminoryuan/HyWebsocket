@@ -1,7 +1,10 @@
 package main
 
-func main() {
+import "fmt"
 
-	h := Hwebsocket{}
-	h.startServer(":8001")
+func main() {
+	a := 0b01111111
+	fmt.Printf("%d", a)
+	return
+
 }

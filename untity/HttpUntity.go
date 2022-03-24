@@ -9,7 +9,7 @@ import (
 
 type HttpUntity struct{}
 
-//解析http协议
+//解析http协议q
 //reqByte 请求的http流
 func (t *HttpUntity) AnalyHttp(reqByte []byte) map[string]string {
 	https := strings.Split(string(reqByte), "\r\n")
