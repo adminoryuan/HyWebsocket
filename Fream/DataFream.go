@@ -1,4 +1,4 @@
-package main
+package fream
 
 import (
 	"fmt"
@@ -31,15 +31,15 @@ type DataFream struct {
 
 }
 
-type dataFreamCodeing struct{}
+type dataFreamCoding struct{}
 
 //返回一个编码对象
-func NewDataFreamCoding() dataFreamCodeing {
-	return dataFreamCodeing{}
+func NewDataFreamCoding() dataFreamCoding {
+	return dataFreamCoding{}
 }
 
 //解析数据帧
-func (c dataFreamCodeing) DecodeDataFream(meg []byte) DataFream {
+func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 	fmt.Println(meg)
 	index := 0
 	d := DataFream{}
@@ -76,7 +76,7 @@ func (c dataFreamCodeing) DecodeDataFream(meg []byte) DataFream {
 }
 
 //生产数据帧 将Datafream 结构体转换为数据帧
-func (c dataFreamCodeing) EnCodingDataFream(f DataFream) []byte {
+func (c dataFreamCoding) EnCodingDataFream(f DataFream) []byte {
 	Data := make([]byte, 0)
 
 	var HeadByte byte = 0b00000000

@@ -51,3 +51,22 @@ func (t *HttpUntity) EncodeSecWebsocketKey(req_scr_key string) string {
 
 	return m
 }
+
+//与客户端进行握手 返回握手包
+func (t *HttpUntity) Handshake(https []byte) []byte {
+
+	HttpMaps := t.AnalyHttp(https)
+
+	//计算key
+	Sce_Rpaly_Key := t.EncodeSecWebsocketKey(HttpMaps["Sec-WebSocket-Key"])
+
+	//构造响应http协议
+	ResponseString := "HTTP/1.1 101 Switching Protocols \r\n"
+	ResponseString += "Upgrade: websocket \r\n"
+	ResponseString += "Connection: Upgrade \r\n"
+	ResponseString += "Sec-WebSocket-Accept: " + Sce_Rpaly_Key + "\r\n"
+	//ResponseString += "Sec-WebSocket-Protocol: chat"
+	ResponseString += "\r\n"
+	fmt.Println(ResponseString)
+	return []byte(ResponseString)
+}
