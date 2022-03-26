@@ -21,6 +21,7 @@ func NewWebsocket() Websocket {
 }
 func (h hwebsocket) StartServer(port string) {
 
+	fmt.Println("服务已经启动")
 	conn, err := net.Listen("tcp", port)
 
 	if err != nil {
@@ -33,15 +34,20 @@ func (h hwebsocket) StartServer(port string) {
 
 		}
 		fmt.Println("收到请求")
-		go h.dispServes(cli)
+		h.ShakeCli(cli)
 	}
 }
 
-func (h hwebsocket) Read(body []byte) error {
+func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
+	for {
+		select {
+		case a := <-h.hobj.PlayLoadData:
+			fun(a)
+		default:
 
-	h.hobj.PlayLoadData <- body
+		}
 
-	return nil
+	}
 }
 
 func (h hwebsocket) Write(meg []byte) error {
@@ -51,10 +57,10 @@ func (h hwebsocket) Write(meg []byte) error {
 	return nil
 }
 
-func (h hwebsocket) dispServes(c net.Conn) {
+//握手
+func (h hwebsocket) ShakeCli(c net.Conn) {
 
 	//defer c.Close()
-
 	Ctx, cal := context.WithCancel(context.Background())
 
 	h.hobj.Canle = cal
@@ -67,6 +73,7 @@ func (h hwebsocket) dispServes(c net.Conn) {
 
 	c.Read(Https)
 
+	//握手
 	ShakeMeg := HttpUntity.Handshake(Https)
 
 	h.hobj.Meg <- ShakeMeg

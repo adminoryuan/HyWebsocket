@@ -67,6 +67,6 @@ func (t *HttpUntity) Handshake(https []byte) []byte {
 	ResponseString += "Sec-WebSocket-Accept: " + Sce_Rpaly_Key + "\r\n"
 	//ResponseString += "Sec-WebSocket-Protocol: chat"
 	ResponseString += "\r\n"
-	fmt.Println(ResponseString)
+
 	return []byte(ResponseString)
 }

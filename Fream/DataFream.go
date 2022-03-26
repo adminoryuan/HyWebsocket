@@ -40,7 +40,7 @@ func NewDataFreamCoding() dataFreamCoding {
 
 //解析数据帧
 func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
-	fmt.Println(meg)
+
 	index := 0
 	d := DataFream{}
 	d.Fin = meg[index] >> 7
@@ -60,11 +60,9 @@ func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 		index += 4
 	}
 	if d.Mask == 1 {
-		fmt.Println("计算maskkey")
 		d.Makeing_Key = meg[index : index+4]
 		index += 4
 	}
-	fmt.Println(d.Makeing_Key)
 	//有效负载数据等于= index-index+数据长度
 	d.PlayLoadData = meg[index : index+(int(d.PayLoadLenth)+untity.BytesToInt(d.ExtenDedPayLoadLen))]
 

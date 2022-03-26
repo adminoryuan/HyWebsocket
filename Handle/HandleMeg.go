@@ -3,7 +3,6 @@ package handle
 import (
 	fream "Hywebsocket/Fream"
 	"context"
-	"fmt"
 	"io"
 )
 
@@ -24,6 +23,8 @@ func NewDispMessage() DispCliMessage {
 	return d
 
 }
+
+//监听读
 func (d DispCliMessage) OnRead(c io.Reader, ctx context.Context) {
 	Mes := make([]byte, 128)
 	for {
@@ -37,19 +38,19 @@ func (d DispCliMessage) OnRead(c io.Reader, ctx context.Context) {
 
 			d.PlayLoadData <- cliFream.PlayLoadData
 
-			fmt.Printf(string(cliFream.PlayLoadData))
 		}
 		//c.Write(nes)
 	}
 }
+
+//监听写
 func (d DispCliMessage) OnWrite(w io.Writer, ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("关闭了")
 			return
 		case a := <-d.Meg:
-			fmt.Println("接收到数据")
+
 			w.Write(a)
 		}
 	}
