@@ -1,6 +1,7 @@
 package main
 
 import (
+	connection "Hywebsocket/Connection"
 	handle "Hywebsocket/Handle"
 	http "Hywebsocket/untity"
 	"context"
@@ -11,13 +12,18 @@ import (
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
 type hwebsocket struct {
-	hobj handle.DispCliMessage
+	hobj     handle.DispCliMessage
+	connFunc OnConnFunc
+	readFunc ReadEventFunc
 }
 
 func NewWebsocket() Websocket {
 	h := hwebsocket{}
 	h.hobj = handle.NewDispMessage()
 	return h
+}
+func (h hwebsocket) OnConnect(funs OnConnFunc) {
+	h.connFunc = funs
 }
 func (h hwebsocket) StartServer(port string) {
 
@@ -39,22 +45,7 @@ func (h hwebsocket) StartServer(port string) {
 }
 
 func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
-	for {
-		select {
-		case a := <-h.hobj.PlayLoadData:
-			fun(a)
-		default:
-
-		}
-
-	}
-}
-
-func (h hwebsocket) Write(meg []byte) error {
-
-	h.hobj.Meg <- meg
-
-	return nil
+	h.readFunc = fun
 }
 
 //握手
@@ -77,5 +68,13 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 	ShakeMeg := HttpUntity.Handshake(Https)
 
 	h.hobj.Meg <- ShakeMeg
+
+	//握手成功调用OnConnect回调
+
+	Wscliobj := connection.WsCli{}
+
+	Wscliobj.SetConn(c)
+
+	h.connFunc(Wscliobj)
 
 }
