@@ -11,10 +11,13 @@ import (
 
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
+var (
+	ConnFunc OnConnFunc
+	ReadFunc ReadEventFunc
+)
+
 type hwebsocket struct {
-	hobj     handle.DispCliMessage
-	connFunc OnConnFunc
-	readFunc ReadEventFunc
+	hobj handle.DispCliMessage
 }
 
 func NewWebsocket() Websocket {
@@ -23,7 +26,7 @@ func NewWebsocket() Websocket {
 	return h
 }
 func (h hwebsocket) OnConnect(funs OnConnFunc) {
-	h.connFunc = funs
+	ConnFunc = funs
 }
 func (h hwebsocket) StartServer(port string) {
 
@@ -45,7 +48,7 @@ func (h hwebsocket) StartServer(port string) {
 }
 
 func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
-	h.readFunc = fun
+	ReadFunc = fun
 }
 
 //握手
@@ -75,6 +78,6 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 
 	Wscliobj.SetConn(c)
 
-	h.connFunc(Wscliobj)
+	ConnFunc(Wscliobj)
 
 }
