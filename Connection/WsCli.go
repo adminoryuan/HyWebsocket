@@ -1,6 +1,8 @@
 package connection
 
-import "net"
+import (
+	"net"
+)
 
 type WsCli struct {
 	conn net.Conn

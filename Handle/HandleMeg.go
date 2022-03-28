@@ -7,8 +7,8 @@ import (
 )
 
 type DispCliMessage struct {
-	codobj       fream.Fream
-	Meg          chan []byte
+	codobj fream.Fream
+
 	Canle        context.CancelFunc
 	PlayLoadData chan []byte
 }
@@ -18,7 +18,7 @@ func NewDispMessage() DispCliMessage {
 
 	d := DispCliMessage{}
 	d.codobj = fream.NewDataFreamCoding()
-	d.Meg = make(chan []byte, 10)
+
 	d.PlayLoadData = make(chan []byte, 10)
 	return d
 
@@ -40,18 +40,5 @@ func (d DispCliMessage) OnRead(c io.Reader, ctx context.Context) {
 
 		}
 		//c.Write(nes)
-	}
-}
-
-//监听写
-func (d DispCliMessage) OnWrite(w io.Writer, ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case a := <-d.Meg:
-
-			w.Write(a)
-		}
 	}
 }
