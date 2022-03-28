@@ -4,7 +4,6 @@ import (
 	connection "Hywebsocket/Connection"
 	handle "Hywebsocket/Handle"
 	http "Hywebsocket/untity"
-	"context"
 	"fmt"
 	"net"
 )
@@ -47,21 +46,20 @@ func (h hwebsocket) StartServer(port string) {
 	}
 }
 
+//收到消息触发回调
 func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
 	ReadFunc = fun
+}
+
+//断开链接触发回调
+func (h hwebsocket) OnClose() {
+
 }
 
 //握手
 func (h hwebsocket) ShakeCli(c net.Conn) {
 
 	//defer c.Close()
-	Ctx, cal := context.WithCancel(context.Background())
-
-	h.hobj.Canle = cal
-
-	go h.hobj.OnWrite(c, Ctx)
-
-	go h.hobj.OnRead(c, Ctx)
 
 	Https := make([]byte, 1024)
 

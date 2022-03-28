@@ -11,7 +11,7 @@ func main() {
 	h.StartServer(":9091")
 
 	h.OnConnect(func(ic connection.IWsCli) {
-		
+
 	})
 	h.onReadEvent(func(b []byte) {
 		fmt.Println("收到了数据")
