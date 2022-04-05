@@ -10,13 +10,10 @@ import (
 
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
-var (
+type hwebsocket struct {
+	hobj     handle.DispCliMessage
 	ConnFunc OnConnFunc
 	ReadFunc ReadEventFunc
-)
-
-type hwebsocket struct {
-	hobj handle.DispCliMessage
 }
 
 func NewWebsocket() Websocket {
@@ -25,7 +22,7 @@ func NewWebsocket() Websocket {
 	return h
 }
 func (h hwebsocket) OnConnect(funs OnConnFunc) {
-	ConnFunc = funs
+	h.ConnFunc = funs
 }
 func (h hwebsocket) StartServer(port string) {
 
@@ -48,7 +45,7 @@ func (h hwebsocket) StartServer(port string) {
 
 //收到消息触发回调
 func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
-	ReadFunc = fun
+	h.ReadFunc = fun
 }
 
 //断开链接触发回调
@@ -68,7 +65,7 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 	//握手
 	ShakeMeg := HttpUntity.Handshake(Https)
 
-	h.hobj.Meg <- ShakeMeg
+	c.Write(ShakeMeg)
 
 	//握手成功调用OnConnect回调
 
@@ -76,6 +73,11 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 
 	Wscliobj.SetConn(c)
 
-	ConnFunc(Wscliobj)
+	//	Wscliobj.SetReadFunc(connection.ReadEventFunc(h.ReadFunc))
+
+	if h.ConnFunc != nil {
+
+		h.ConnFunc(Wscliobj)
+	}
 
 }

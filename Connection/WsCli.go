@@ -25,7 +25,6 @@ func (c WsCli) SetReadFunc(Rfunc ReadEventFunc) {
 
 //当链接建立成功时 监听读
 func (c WsCli) Read() {
-
 	go func() {
 		var Bodys []byte = make([]byte, 512)
 		for {
