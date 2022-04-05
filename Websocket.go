@@ -2,9 +2,10 @@ package main
 
 import (
 	connection "Hywebsocket/Connection"
+	request "Hywebsocket/Request"
 )
 
-type ReadEventFunc func(RequestConn)
+type ReadEventFunc func(request.RequestConn)
 type OnConnFunc func(connection.IWsCli)
 type OnCloseFunc func()
 

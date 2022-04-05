@@ -2,30 +2,32 @@ package handle
 
 import (
 	fream "Hywebsocket/Fream"
+	request "Hywebsocket/Request"
 	"context"
 	"io"
+	"net"
 )
 
 type DispCliMessage struct {
-	codobj       fream.Fream
-	Meg          chan []byte
-	Canle        context.CancelFunc
-	PlayLoadData chan []byte
+	codobj fream.Fream
+	Canle  context.CancelFunc
+
+	ReadEvent func(request.RequestConn)
 }
 
 //服务端的消息监听和发送
-func NewDispMessage() DispCliMessage {
+func NewDispMessage(f func(request.RequestConn)) DispCliMessage {
 
 	d := DispCliMessage{}
+	d.ReadEvent = f
 	d.codobj = fream.NewDataFreamCoding()
-	d.Meg = make(chan []byte, 10)
-	d.PlayLoadData = make(chan []byte, 10)
+
 	return d
 
 }
 
 //监听读
-func (d DispCliMessage) OnRead(c io.Reader, ctx context.Context) {
+func (d DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
 	Mes := make([]byte, 128)
 	for {
 		select {
@@ -36,22 +38,13 @@ func (d DispCliMessage) OnRead(c io.Reader, ctx context.Context) {
 
 			cliFream := d.codobj.DecodeDataFream(Mes)
 
-			d.PlayLoadData <- cliFream.PlayLoadData
+			d.ReadEvent(request.RequestConn{
+				LocalRemoter: ip,
+				Bodys:        cliFream.PlayLoadData,
+			})
+			//	d.PlayLoadData <- cliFream.PlayLoadData
 
 		}
 		//c.Write(nes)
-	}
-}
-
-//监听写
-func (d DispCliMessage) OnWrite(w io.Writer, ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case a := <-d.Meg:
-
-			w.Write(a)
-		}
 	}
 }

@@ -4,6 +4,7 @@ import (
 	connection "Hywebsocket/Connection"
 	handle "Hywebsocket/Handle"
 	http "Hywebsocket/untity"
+	"context"
 	"fmt"
 	"net"
 )
@@ -18,7 +19,6 @@ type hwebsocket struct {
 
 func NewWebsocket() Websocket {
 	h := hwebsocket{}
-	h.hobj = handle.NewDispMessage()
 	return h
 }
 func (h hwebsocket) OnConnect(funs OnConnFunc) {
@@ -40,6 +40,7 @@ func (h hwebsocket) StartServer(port string) {
 		}
 		fmt.Println("收到请求")
 		h.ShakeCli(cli)
+
 	}
 }
 
@@ -79,5 +80,7 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 
 		h.ConnFunc(Wscliobj)
 	}
+	han := handle.NewDispMessage(h.ReadFunc)
 
+	go han.OnRead(c, net.IP(c.LocalAddr().Network()), context.Background())
 }
