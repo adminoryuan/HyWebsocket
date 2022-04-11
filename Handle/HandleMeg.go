@@ -4,6 +4,8 @@ import (
 	fream "Hywebsocket/Fream"
 	request "Hywebsocket/Request"
 	"context"
+	"errors"
+	"fmt"
 	"io"
 	"net"
 )
@@ -27,7 +29,7 @@ func NewDispMessage(f func(request.RequestConn)) DispCliMessage {
 }
 
 //监听读
-func (d DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
+func (d *DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
 	Mes := make([]byte, 128)
 	for {
 		select {
@@ -37,11 +39,20 @@ func (d DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
 			c.Read(Mes)
 
 			cliFream := d.codobj.DecodeDataFream(Mes)
-
+			fmt.Println("recive cliform...")
+			//执行一个回调函数 
+			
+			if d.ReadEvent==nil {
+				panic(errors.New("Notfould recive envent..."))
+			}
 			d.ReadEvent(request.RequestConn{
 				LocalRemoter: ip,
 				Bodys:        cliFream.PlayLoadData,
 			})
+
+			
+
+
 			//	d.PlayLoadData <- cliFream.PlayLoadData
 
 		}

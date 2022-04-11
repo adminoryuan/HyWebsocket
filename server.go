@@ -80,6 +80,7 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 
 		h.ConnFunc(Wscliobj)
 	}
+	
 	han := handle.NewDispMessage(h.ReadFunc)
 
 	go han.OnRead(c, net.IP(c.LocalAddr().Network()), context.Background())
