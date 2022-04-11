@@ -7,24 +7,30 @@ import (
 	"sync"
 )
 
-type WsCli struct {
+type wsCli struct {
 	conn     net.Conn
 	Mask_key []byte //保存上一次读取到的Make_key
 	Locks    sync.RWMutex
 	Rfunc    ReadEventFunc
 }
 
+func NewWsCli() IWsCli {
+	w := wsCli{}
+	w.Locks = sync.RWMutex{}
+	return &w
+}
+
 var FreamObj fream.Fream = fream.NewDataFreamCoding()
 
-func (c WsCli) SetConn(cli net.Conn) {
+func (c *wsCli) SetConn(cli net.Conn) {
 	c.conn = cli
 }
-func (c WsCli) SetReadFunc(Rfunc ReadEventFunc) {
+func (c *wsCli) SetReadFunc(Rfunc ReadEventFunc) {
 	c.Rfunc = Rfunc
 }
 
 //当链接建立成功时 监听读
-func (c WsCli) Read() {
+func (c *wsCli) Read() {
 	go func() {
 		var Bodys []byte = make([]byte, 512)
 		for {
@@ -42,7 +48,7 @@ func (c WsCli) Read() {
 
 	}()
 }
-func (c WsCli) Write(meg []byte) error {
+func (c *wsCli) Write(meg []byte) error {
 	//定义发送数据的接口
 	frem := fream.DataFream{
 		Fin:          0,

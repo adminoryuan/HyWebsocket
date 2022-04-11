@@ -9,13 +9,12 @@ import (
 func main() {
 	h := NewWebsocket()
 
-	h.StartServer(":9091")
-
 	h.OnConnect(func(ic connection.IWsCli) {
 		ic.Write([]byte("heelo"))
 	})
 	h.onReadEvent(func(rc request.RequestConn) {
 		fmt.Println(string(rc.Bodys))
 	})
+	h.StartServer(":9091")
 
 }

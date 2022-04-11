@@ -12,19 +12,18 @@ import (
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
 type hwebsocket struct {
-	hobj     handle.DispCliMessage
 	ConnFunc OnConnFunc
 	ReadFunc ReadEventFunc
 }
 
 func NewWebsocket() Websocket {
 	h := hwebsocket{}
-	return h
+	return &h
 }
-func (h hwebsocket) OnConnect(funs OnConnFunc) {
+func (h *hwebsocket) OnConnect(funs OnConnFunc) {
 	h.ConnFunc = funs
 }
-func (h hwebsocket) StartServer(port string) {
+func (h *hwebsocket) StartServer(port string) {
 
 	fmt.Println("服务已经启动")
 	conn, err := net.Listen("tcp", port)
@@ -45,17 +44,18 @@ func (h hwebsocket) StartServer(port string) {
 }
 
 //收到消息触发回调
-func (h hwebsocket) onReadEvent(fun ReadEventFunc) {
+func (h *hwebsocket) onReadEvent(fun ReadEventFunc) {
+
 	h.ReadFunc = fun
 }
 
 //断开链接触发回调
-func (h hwebsocket) OnClose() {
+func (h *hwebsocket) OnClose() {
 
 }
 
 //握手
-func (h hwebsocket) ShakeCli(c net.Conn) {
+func (h *hwebsocket) ShakeCli(c net.Conn) {
 
 	//defer c.Close()
 
@@ -70,17 +70,15 @@ func (h hwebsocket) ShakeCli(c net.Conn) {
 
 	//握手成功调用OnConnect回调
 
-	Wscliobj := connection.WsCli{}
+	Wscliobj := connection.NewWsCli()
 
 	Wscliobj.SetConn(c)
-
-	//	Wscliobj.SetReadFunc(connection.ReadEventFunc(h.ReadFunc))
 
 	if h.ConnFunc != nil {
 
 		h.ConnFunc(Wscliobj)
 	}
-	
+
 	han := handle.NewDispMessage(h.ReadFunc)
 
 	go han.OnRead(c, net.IP(c.LocalAddr().Network()), context.Background())

@@ -40,18 +40,16 @@ func (d *DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
 
 			cliFream := d.codobj.DecodeDataFream(Mes)
 			fmt.Println("recive cliform...")
-			//执行一个回调函数 
-			
-			if d.ReadEvent==nil {
+			//执行一个回调函数
+
+			if d.ReadEvent == nil {
 				panic(errors.New("Notfould recive envent..."))
 			}
+
 			d.ReadEvent(request.RequestConn{
-				LocalRemoter: ip,
+			LocalRemoter: ip,
 				Bodys:        cliFream.PlayLoadData,
 			})
-
-			
-
 
 			//	d.PlayLoadData <- cliFream.PlayLoadData
 
