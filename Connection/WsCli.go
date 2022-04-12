@@ -3,6 +3,7 @@ package connection
 import (
 	fream "Hywebsocket/Fream"
 	request "Hywebsocket/context"
+	"fmt"
 	"io"
 	"net"
 	"sync"
@@ -43,6 +44,9 @@ func (c *wsCli) OnRead() {
 
 			c.Mask_key = f.Makeing_Key
 
+			fmt.Printf("mask_key : = %s ", c.Mask_key)
+
+			
 			c.Rfunc(request.RequestConn{
 				LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
 				Bodys:        f.PlayLoadData,
@@ -53,6 +57,7 @@ func (c *wsCli) OnRead() {
 }
 func (c *wsCli) Write(meg []byte) error {
 
+	fmt.Println("send... ")
 	//定义发送数据的接口
 	frem := fream.DataFream{
 		Fin:          0,
@@ -60,11 +65,15 @@ func (c *wsCli) Write(meg []byte) error {
 		OpCode:       0x01,
 		Mask:         1,
 		PayLoadLenth: byte(len(meg)),
+		Makeing_Key:  c.Mask_key,
 		PlayLoadData: meg,
 	}
+	if frem.Makeing_Key == nil {
+		frem.Makeing_Key = []byte("1asdl;;alskd")
+	}
+	fmt.Println(frem.Makeing_Key)
 
-	frem.Makeing_Key = c.Mask_key
-
+	fmt.Println(frem)
 	go func() {
 		c.conn.Write(c.freamObj.EnCodingDataFream(frem))
 	}()

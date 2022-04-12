@@ -2,7 +2,7 @@ package main
 
 import (
 	connection "Hywebsocket/Connection"
-	request "Hywebsocket/Request"
+	request "Hywebsocket/context"
 	"fmt"
 )
 
