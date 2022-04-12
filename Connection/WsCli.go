@@ -2,6 +2,7 @@ package connection
 
 import (
 	fream "Hywebsocket/Fream"
+	"fmt"
 	"io"
 	"net"
 	"sync"
@@ -39,10 +40,9 @@ func (c *wsCli) Read() {
 				break
 			}
 			f := FreamObj.DecodeDataFream(Bodys[:n])
-			c.Locks.Lock()
-			c.Mask_key = f.Makeing_Key
-			c.Locks.Unlock()
 
+			c.Mask_key = f.Makeing_Key 
+			
 			c.Rfunc(Bodys[:n])
 		}
 
@@ -58,9 +58,11 @@ func (c *wsCli) Write(meg []byte) error {
 		PayLoadLenth: byte(len(meg)),
 		PlayLoadData: meg,
 	}
-	c.Locks.RLocker()
+
 	frem.Makeing_Key = c.Mask_key
-	c.Locks.RLocker().Unlock()
+
+	fmt.Printf("mask_key ..%s",frem.Makeing_Key)
+
 
 	go func() {
 		c.Write(FreamObj.EnCodingDataFream(frem))

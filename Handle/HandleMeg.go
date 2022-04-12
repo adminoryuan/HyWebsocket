@@ -13,7 +13,6 @@ import (
 type DispCliMessage struct {
 	codobj fream.Fream
 	Canle  context.CancelFunc
-
 	ReadEvent func(request.RequestConn)
 }
 
@@ -46,12 +45,13 @@ func (d *DispCliMessage) OnRead(c io.Reader, ip net.IP, ctx context.Context) {
 				panic(errors.New("Notfould recive envent..."))
 			}
 
-			d.ReadEvent(request.RequestConn{
-			LocalRemoter: ip,
-				Bodys:        cliFream.PlayLoadData,
-			})
-
-			//	d.PlayLoadData <- cliFream.PlayLoadData
+			go func() {
+				d.ReadEvent(
+					request.RequestConn{
+						LocalRemoter: ip,
+						Bodys:        cliFream.PlayLoadData,
+					})
+			}()
 
 		}
 		//c.Write(nes)

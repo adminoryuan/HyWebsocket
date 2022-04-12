@@ -11,9 +11,10 @@ func main() {
 
 	h.OnConnect(func(ic connection.IWsCli) {
 		ic.Write([]byte("heelo"))
+		fmt.Printf("链接成功")
 	})
 	h.onReadEvent(func(rc request.RequestConn) {
-		fmt.Println(string(rc.Bodys))
+		fmt.Printf("my Recive.. %s",string(rc.Bodys))
 	})
 	h.StartServer(":9091")
 
