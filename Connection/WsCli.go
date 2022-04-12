@@ -2,7 +2,7 @@ package connection
 
 import (
 	fream "Hywebsocket/Fream"
-	request "Hywebsocket/Request"
+	request "Hywebsocket/context"
 	"io"
 	"net"
 	"sync"
