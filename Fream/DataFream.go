@@ -40,7 +40,7 @@ func NewDataFreamCoding() dataFreamCoding {
 
 //解析数据帧
 func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
-
+	fmt.Println("Encodeing...")
 	index := 0
 	d := DataFream{}
 	d.Fin = meg[index] >> 7
@@ -50,7 +50,6 @@ func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 	d.Mask = meg[index] >> 7
 	d.PayLoadLenth = (meg[index] << 1) >> 1
 	index += 1
-	fmt.Print(d.PayLoadLenth)
 
 	if d.PayLoadLenth == 126 {
 		d.ExtenDedPayLoadLen = meg[index : index+2]
@@ -69,7 +68,7 @@ func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 	for i, _ := range d.PlayLoadData {
 		d.PlayLoadData[i] ^= d.Makeing_Key[i%4]
 	}
-
+	fmt.Println(d)
 	return d
 }
 

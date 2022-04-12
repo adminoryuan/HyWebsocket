@@ -2,7 +2,7 @@ package connection
 
 import (
 	fream "Hywebsocket/Fream"
-	"fmt"
+	request "Hywebsocket/Request"
 	"io"
 	"net"
 	"sync"
@@ -13,15 +13,15 @@ type wsCli struct {
 	Mask_key []byte //保存上一次读取到的Make_key
 	Locks    sync.RWMutex
 	Rfunc    ReadEventFunc
+	freamObj fream.Fream
 }
 
 func NewWsCli() IWsCli {
 	w := wsCli{}
 	w.Locks = sync.RWMutex{}
+	w.freamObj = fream.NewDataFreamCoding()
 	return &w
 }
-
-var FreamObj fream.Fream = fream.NewDataFreamCoding()
 
 func (c *wsCli) SetConn(cli net.Conn) {
 	c.conn = cli
@@ -31,7 +31,7 @@ func (c *wsCli) SetReadFunc(Rfunc ReadEventFunc) {
 }
 
 //当链接建立成功时 监听读
-func (c *wsCli) Read() {
+func (c *wsCli) OnRead() {
 	go func() {
 		var Bodys []byte = make([]byte, 512)
 		for {
@@ -39,16 +39,20 @@ func (c *wsCli) Read() {
 			if err == io.EOF {
 				break
 			}
-			f := FreamObj.DecodeDataFream(Bodys[:n])
+			f := c.freamObj.DecodeDataFream(Bodys[:n])
 
-			c.Mask_key = f.Makeing_Key 
-			
-			c.Rfunc(Bodys[:n])
+			c.Mask_key = f.Makeing_Key
+
+			c.Rfunc(request.RequestConn{
+				LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
+				Bodys:        f.PlayLoadData,
+			})
 		}
 
 	}()
 }
 func (c *wsCli) Write(meg []byte) error {
+
 	//定义发送数据的接口
 	frem := fream.DataFream{
 		Fin:          0,
@@ -61,11 +65,8 @@ func (c *wsCli) Write(meg []byte) error {
 
 	frem.Makeing_Key = c.Mask_key
 
-	fmt.Printf("mask_key ..%s",frem.Makeing_Key)
-
-
 	go func() {
-		c.Write(FreamObj.EnCodingDataFream(frem))
+		c.conn.Write(c.freamObj.EnCodingDataFream(frem))
 	}()
 	return nil
 }

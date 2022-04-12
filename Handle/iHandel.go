@@ -7,5 +7,5 @@ import (
 
 type Handel interface {
 	onRead(c io.Reader, ctx context.Context)
-	OnWrite(w io.Writer, ctx context.Context)
+	//OnWrite(w io.Writer, ctx context.Context)
 }

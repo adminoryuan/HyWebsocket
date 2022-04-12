@@ -2,9 +2,7 @@ package main
 
 import (
 	connection "Hywebsocket/Connection"
-	handle "Hywebsocket/Handle"
 	http "Hywebsocket/untity"
-	"context"
 	"fmt"
 	"net"
 )
@@ -27,7 +25,6 @@ func (h *hwebsocket) StartServer(port string) {
 
 	fmt.Println("服务已经启动")
 	conn, err := net.Listen("tcp", port)
-
 	if err != nil {
 		panic(err)
 	}
@@ -78,8 +75,11 @@ func (h *hwebsocket) ShakeCli(c net.Conn) {
 
 		h.ConnFunc(Wscliobj)
 	}
+	Wscliobj.SetReadFunc(connection.ReadEventFunc(h.ReadFunc))
+	//开启一个监听读
+	go Wscliobj.OnRead()
 
-	han := handle.NewDispMessage(h.ReadFunc)
+	// han := handle.NewDispMessage(h.ReadFunc)
 
-	go han.OnRead(c, net.IP(c.LocalAddr().Network()), context.Background())
+	// go han.OnRead(c, net.IP(c.LocalAddr().Network()), context.Background())
 }
