@@ -45,12 +45,14 @@ func (c *wsCli) OnRead() {
 			c.Mask_key = f.Makeing_Key
 
 			fmt.Printf("mask_key : = %s ", c.Mask_key)
-
-			
-			c.Rfunc(request.RequestConn{
-				LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
-				Bodys:        f.PlayLoadData,
-			})
+			ctx := request.Context{
+				Req: request.RequestConn{
+					LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
+					Bodys:        f.PlayLoadData,
+				},
+				Resp: request.NewWebsocketResp(c.conn, c.Mask_key),
+			}
+			c.Rfunc(ctx)
 		}
 
 	}()

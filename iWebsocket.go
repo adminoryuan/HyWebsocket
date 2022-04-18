@@ -5,7 +5,7 @@ import (
 	request "Hywebsocket/context"
 )
 
-type ReadEventFunc func(request.RequestConn)
+type ReadEventFunc func(request.Context)
 type OnConnFunc func(connection.IWsCli)
 type OnCloseFunc func()
 

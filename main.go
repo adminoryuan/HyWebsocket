@@ -14,8 +14,8 @@ func main() {
 		fmt.Printf("链接成功 \n")
 	})
 
-	h.onReadEvent(func(rc request.RequestConn) {
-		fmt.Printf("my Recive.. %s \n", string(rc.Bodys))
+	h.onReadEvent(func(c request.Context) {
+		
 
 	})
 
