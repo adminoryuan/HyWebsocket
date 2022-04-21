@@ -2,7 +2,7 @@ package connection
 
 import (
 	fream "Hywebsocket/Fream"
-	request "Hywebsocket/context"
+	webcontext "Hywebsocket/WebContext"
 	"fmt"
 	"io"
 	"net"
@@ -45,12 +45,12 @@ func (c *wsCli) OnRead() {
 			c.Mask_key = f.Makeing_Key
 
 			fmt.Printf("mask_key : = %s ", c.Mask_key)
-			ctx := request.Context{
-				Req: request.RequestConn{
+			ctx := webcontext.Context{
+				Req: webcontext.RequestConn{
 					LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
 					Bodys:        f.PlayLoadData,
 				},
-				Resp: request.NewWebsocketResp(c.conn, c.Mask_key),
+				Resp: webcontext.NewWebsocketResp(c.conn, c.Mask_key),
 			}
 			c.Rfunc(ctx)
 		}
@@ -73,9 +73,8 @@ func (c *wsCli) Write(meg []byte) error {
 	if frem.Makeing_Key == nil {
 		frem.Makeing_Key = []byte("1asdl;;alskd")
 	}
-	fmt.Println(frem.Makeing_Key)
+	fmt.Printf("send make_key", string(frem.Makeing_Key))
 
-	fmt.Println(frem)
 	go func() {
 		c.conn.Write(c.freamObj.EnCodingDataFream(frem))
 	}()

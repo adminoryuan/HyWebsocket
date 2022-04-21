@@ -1,4 +1,4 @@
-package context
+package Webcontext
 
 import "net"
 
@@ -8,5 +8,3 @@ type RequestConn struct {
 
 	Bodys []byte
 }
-
-

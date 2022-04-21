@@ -1,11 +1,11 @@
 package connection
 
 import (
-	"Hywebsocket/context"
+	ctx "Hywebsocket/WebContext"
 	"net"
 )
 
-type ReadEventFunc func(context.Context)
+type ReadEventFunc func(ctx.Context)
 
 //握手成功后返回的对象
 type IWsCli interface {
