@@ -40,11 +40,12 @@ func (c *wsCli) OnRead() {
 			if err == io.EOF {
 				break
 			}
-			f := c.freamObj.DecodeDataFream(Bodys[:n])
 
+			f := c.freamObj.DecodeDataFream(Bodys[:n])
 			c.Mask_key = f.Makeing_Key
 
-			fmt.Printf("mask_key : = %s ", c.Mask_key)
+			fmt.Printf("mask_key : = %s \n", c.Mask_key)
+
 			ctx := webcontext.Context{
 				Req: webcontext.RequestConn{
 					LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
@@ -53,30 +54,29 @@ func (c *wsCli) OnRead() {
 				Resp: webcontext.NewWebsocketResp(c.conn, c.Mask_key),
 			}
 			c.Rfunc(ctx)
+
+			//c.Write([]byte("qqwer"))
+
 		}
 
 	}()
 }
 func (c *wsCli) Write(meg []byte) error {
 
-	fmt.Println("send... ")
 	//定义发送数据的接口
 	frem := fream.DataFream{
 		Fin:          0,
 		Rsv:          true,
 		OpCode:       0x01,
-		Mask:         1,
+		Mask:         0,
 		PayLoadLenth: byte(len(meg)),
 		Makeing_Key:  c.Mask_key,
 		PlayLoadData: meg,
 	}
-	if frem.Makeing_Key == nil {
-		frem.Makeing_Key = []byte("1asdl;;alskd")
-	}
-	fmt.Printf("send make_key", string(frem.Makeing_Key))
-
 	go func() {
+		fmt.Printf("make-send %s \n", c.Mask_key)
 		c.conn.Write(c.freamObj.EnCodingDataFream(frem))
 	}()
+
 	return nil
 }

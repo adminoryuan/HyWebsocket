@@ -1,8 +1,6 @@
 package fream
 
 import (
-	"fmt"
-
 	untity "Hywebsocket/untity"
 )
 
@@ -40,7 +38,7 @@ func NewDataFreamCoding() dataFreamCoding {
 
 //解析数据帧
 func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
-	fmt.Println("Encodeing...")
+	//fmt.Println("Encodeing...")
 	index := 0
 	d := DataFream{}
 	d.Fin = meg[index] >> 7
@@ -68,7 +66,7 @@ func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 	for i, _ := range d.PlayLoadData {
 		d.PlayLoadData[i] ^= d.Makeing_Key[i%4]
 	}
-	fmt.Println(d)
+	//	fmt.Println(d)
 	return d
 }
 
@@ -76,7 +74,7 @@ func (c dataFreamCoding) DecodeDataFream(meg []byte) DataFream {
 func (c dataFreamCoding) EnCodingDataFream(f DataFream) []byte {
 	Data := make([]byte, 0)
 
-	var HeadByte byte = 0b00000000
+	var HeadByte byte
 	HeadByte = f.Fin
 	HeadByte = HeadByte << 7
 
@@ -96,10 +94,9 @@ func (c dataFreamCoding) EnCodingDataFream(f DataFream) []byte {
 		Data = append(Data, f.ExtenDedPayLoadLen...)
 	}
 	if f.Mask == 1 {
-
 		Data = append(Data, f.Makeing_Key...)
-
 	}
+
 	Data = append(Data, f.PlayLoadData...)
 	Data = append(Data, f.ExtensionData...)
 	return Data

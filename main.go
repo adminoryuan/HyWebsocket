@@ -15,7 +15,10 @@ func main() {
 	})
 
 	h.onReadEvent(func(c ctx.Context) {
+		fmt.Printf("recv %s \n", string(c.Req.Bodys))
+
 		c.Resp.Write([]byte("zhangsan"))
+
 	})
 
 	h.StartServer(":9091")

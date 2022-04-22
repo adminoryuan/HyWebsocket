@@ -2,7 +2,6 @@ package Webcontext
 
 import (
 	fream "Hywebsocket/Fream"
-	"fmt"
 	"io"
 )
 
@@ -19,16 +18,21 @@ func NewWebsocketResp(write io.Writer, key []byte) WebsocketResp {
 
 }
 func (w *WebsocketResp) Write(Body []byte) {
-	fmt.Printf("send make_key=%s", w.key)
+
 	frem := fream.DataFream{
-		Fin:          0,
-		Rsv:          true,
-		OpCode:       0x01,
-		Mask:         1,
-		PayLoadLenth: byte(len(Body)),
-		Makeing_Key:  w.key,
-		PlayLoadData: Body,
+		Fin:                1,
+		Rsv:                true,
+		OpCode:             byte(0x01),
+		Mask:               byte(0),
+		PayLoadLenth:       byte(len(Body)),
+		Makeing_Key:        w.key,
+		PlayLoadData:       Body,
+		ExtenDedPayLoadLen: []byte{},
+	}
+	if w.key == nil {
+		frem.Mask = byte(0)
 	}
 	untity := fream.NewDataFreamCoding()
+
 	w.ioWrite.Write(untity.EnCodingDataFream(frem))
 }
