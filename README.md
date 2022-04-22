@@ -1,3 +1,7 @@
 # HyWebsocket
-用golang 实现的一个websoket 库
-持续更新中 目前实现了基础的发送与接收
+- # 介绍
+  - 使用golang 开发的一个websoket 库
+  (ttps://img.shields.io/badge/golang-1.16.5-red)[]
+   
+
+
