@@ -2,6 +2,8 @@
 - # 介绍
   - 使用golang 开发的一个websoket 库
   - ![golang](https://img.shields.io/badge/golang-1.16.5-red) ![Mit](https://img.shields.io/badge/Mit-Passing-yellow)
+- # 快速入门
+- # 安装
 - # 具体功能
 
 - # 实例
