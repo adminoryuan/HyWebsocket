@@ -61,22 +61,21 @@ func (c *wsCli) OnRead() {
 
 	}()
 }
-func (c *wsCli) Write(meg []byte) error {
+func (c *wsCli) Write(Body []byte) error {
 
-	//定义发送数据的接口
 	frem := fream.DataFream{
-		Fin:          0,
-		Rsv:          true,
-		OpCode:       0x01,
-		Mask:         0,
-		PayLoadLenth: byte(len(meg)),
-		Makeing_Key:  c.Mask_key,
-		PlayLoadData: meg,
+		Fin:                1,
+		Rsv:                true,
+		OpCode:             byte(0x01),
+		Mask:               byte(0),
+		PayLoadLenth:       byte(len(Body)),
+		Makeing_Key:        c.Mask_key,
+		PlayLoadData:       Body,
+		ExtenDedPayLoadLen: []byte{},
 	}
+
 	go func() {
-		fmt.Printf("make-send %s \n", c.Mask_key)
 		c.conn.Write(c.freamObj.EnCodingDataFream(frem))
 	}()
-
 	return nil
 }

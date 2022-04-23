@@ -10,7 +10,7 @@ func main() {
 	h := NewWebsocket()
 
 	h.OnConnect(func(ic connection.IWsCli) {
-		//ic.Write([]byte("heelo"))
+		ic.Write([]byte("heelo"))
 		fmt.Printf("链接成功 \n")
 	})
 
@@ -20,6 +20,5 @@ func main() {
 		c.Resp.Write([]byte("zhangsan"))
 
 	})
-
 	h.StartServer(":9091")
 }
