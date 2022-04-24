@@ -3,7 +3,6 @@ package connection
 import (
 	fream "Hywebsocket/Fream"
 	webcontext "Hywebsocket/WebContext"
-	"fmt"
 	"io"
 	"net"
 	"sync"
@@ -42,23 +41,28 @@ func (c *wsCli) OnRead() {
 			if err == io.EOF {
 				break
 			}
-			fmt.Println("recv..%s")
+
 			f := c.freamObj.DecodeDataFream(Bodys[:n])
-			if f.OpCode == 0x90 {
-				//ping包
+
+			switch f.OpCode {
+			case 8:
+
+				c.conn.Close()
+				return
+			case 9:
 				Pong(c.conn)
 				return
+			case 0:
+				c.Mask_key = f.Makeing_Key
+				ctx := webcontext.Context{
+					Req: webcontext.RequestConn{
+						LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
+						Bodys:        f.PlayLoadData,
+					},
+					Resp: webcontext.NewWebsocketResp(c.conn, c.Mask_key),
+				}
+				c.Rfunc(ctx)
 			}
-			c.Mask_key = f.Makeing_Key
-
-			ctx := webcontext.Context{
-				Req: webcontext.RequestConn{
-					LocalRemoter: net.IP(c.conn.RemoteAddr().Network()),
-					Bodys:        f.PlayLoadData,
-				},
-				Resp: webcontext.NewWebsocketResp(c.conn, c.Mask_key),
-			}
-			c.Rfunc(ctx)
 
 			//c.Write([]byte("qqwer"))
 
