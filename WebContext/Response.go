@@ -29,7 +29,9 @@ func (w *WebsocketResp) Write(Body []byte) {
 		PlayLoadData:       Body,
 		ExtenDedPayLoadLen: []byte{},
 	}
-
+	if w.key == nil {
+		frem.Mask = byte(0)
+	}
 	untity := fream.NewDataFreamCoding()
 
 	w.ioWrite.Write(untity.EnCodingDataFream(frem))

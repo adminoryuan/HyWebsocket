@@ -3,7 +3,6 @@ package untity
 import (
 	"crypto/sha1"
 	"encoding/base64"
-	"fmt"
 	"strings"
 )
 
@@ -37,7 +36,6 @@ func (t *HttpUntity) AnalyHttp(reqByte []byte) map[string]string {
 // 计算key
 func (t *HttpUntity) EncodeSecWebsocketKey(req_scr_key string) string {
 	//guid := tsgutils.GUID()
-	fmt.Println("target", req_scr_key)
 
 	req_scr_key = strings.ReplaceAll(req_scr_key, " ", "")
 	req_scr_key = strings.ReplaceAll(req_scr_key, "0x00", "")

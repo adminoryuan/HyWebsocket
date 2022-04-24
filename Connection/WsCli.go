@@ -23,7 +23,9 @@ func NewWsCli() IWsCli {
 	w.freamObj = fream.NewDataFreamCoding()
 	return &w
 }
-
+func (c *wsCli) GetRemoterAddr() net.Addr {
+	return c.conn.RemoteAddr()
+}
 func (c *wsCli) SetConn(cli net.Conn) {
 	c.conn = cli
 }
@@ -40,11 +42,14 @@ func (c *wsCli) OnRead() {
 			if err == io.EOF {
 				break
 			}
-
+			fmt.Println("recv..%s")
 			f := c.freamObj.DecodeDataFream(Bodys[:n])
+			if f.OpCode == 0x90 {
+				//ping包
+				Pong(c.conn)
+				return
+			}
 			c.Mask_key = f.Makeing_Key
-
-			fmt.Printf("mask_key : = %s \n", c.Mask_key)
 
 			ctx := webcontext.Context{
 				Req: webcontext.RequestConn{

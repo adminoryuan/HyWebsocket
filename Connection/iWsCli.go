@@ -13,4 +13,5 @@ type IWsCli interface {
 	SetReadFunc(ReadEventFunc)
 	OnRead()
 	SetConn(cli net.Conn)
+	GetRemoterAddr() net.Addr
 }

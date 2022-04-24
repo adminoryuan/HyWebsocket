@@ -23,7 +23,6 @@ func (h *hwebsocket) OnConnect(funs OnConnFunc) {
 }
 func (h *hwebsocket) StartServer(port string) {
 
-	fmt.Println("服务已经启动")
 	conn, err := net.Listen("tcp", port)
 	if err != nil {
 		panic(err)
@@ -34,7 +33,6 @@ func (h *hwebsocket) StartServer(port string) {
 			fmt.Println(err.Error())
 
 		}
-		fmt.Println("收到请求")
 		h.ShakeCli(cli)
 
 	}
