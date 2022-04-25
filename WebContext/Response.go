@@ -2,6 +2,7 @@ package Webcontext
 
 import (
 	fream "Hywebsocket/Fream"
+	"encoding/json"
 	"io"
 )
 
@@ -35,4 +36,15 @@ func (w *WebsocketResp) Write(Body []byte) {
 	untity := fream.NewDataFreamCoding()
 
 	w.ioWrite.Write(untity.EnCodingDataFream(frem))
+}
+
+func (w *WebsocketResp) WriteJson(obj interface{}) error {
+
+	bodys, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+	w.Write(bodys)
+	return nil
+
 }
