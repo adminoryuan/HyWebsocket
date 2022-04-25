@@ -3,6 +3,7 @@ package main
 import (
 	fream "Hywebsocket/Fream"
 	webcontext "Hywebsocket/WebContext"
+	"fmt"
 	"io"
 	"net"
 	"sync"
@@ -41,9 +42,9 @@ func (c *wsCli) OnRead() {
 			if err == io.EOF {
 				break
 			}
-
 			f := c.freamObj.DecodeDataFream(Bodys[:n])
 
+			fmt.Printf("%d", f.OpCode)
 			switch f.OpCode {
 			case 8:
 
@@ -52,7 +53,8 @@ func (c *wsCli) OnRead() {
 			case 9:
 				Pong(c.conn)
 				return
-			case 0:
+			case 1:
+
 				c.Mask_key = f.Makeing_Key
 				ctx := webcontext.Context{
 					Req: webcontext.RequestConn{
