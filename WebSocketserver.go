@@ -1,7 +1,6 @@
 package main
 
 import (
-	connection "Hywebsocket/Connection"
 	http "Hywebsocket/untity"
 	"fmt"
 	"net"
@@ -65,7 +64,7 @@ func (h *hwebsocket) ShakeCli(c net.Conn) {
 
 	//握手成功调用OnConnect回调
 
-	Wscliobj := connection.NewWsCli()
+	Wscliobj := NewWsCli()
 
 	Wscliobj.SetConn(c)
 
@@ -73,7 +72,7 @@ func (h *hwebsocket) ShakeCli(c net.Conn) {
 
 		h.ConnFunc(Wscliobj)
 	}
-	Wscliobj.SetReadFunc(connection.ReadEventFunc(h.ReadFunc))
+	Wscliobj.SetReadFunc(ReadEventFunc(h.ReadFunc))
 	//开启一个监听读
 	go Wscliobj.OnRead()
 

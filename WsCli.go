@@ -1,4 +1,4 @@
-package connection
+package main
 
 import (
 	fream "Hywebsocket/Fream"

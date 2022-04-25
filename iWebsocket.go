@@ -1,12 +1,6 @@
 package main
 
-import (
-	connection "Hywebsocket/Connection"
-	webContext "Hywebsocket/WebContext"
-)
-
-type ReadEventFunc func(webContext.Context)
-type OnConnFunc func(connection.IWsCli)
+type OnConnFunc func(IWsCli)
 type OnCloseFunc func()
 
 // 对外公布的websocket接口
