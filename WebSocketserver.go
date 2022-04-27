@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	http "github.com/Hywebsocket/untity"
+	http "github.com/adminoryuan/HyWebsocket/untity"
 )
 
 var HttpUntity http.HttpUntity = http.HttpUntity{}

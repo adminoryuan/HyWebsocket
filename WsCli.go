@@ -6,8 +6,8 @@ import (
 	"net"
 	"sync"
 
-	fream "github.com/Hywebsocket/Fream"
-	webcontext "github.com/Hywebsocket/WebContext"
+	fream "github.com/adminoryuan/HyWebsocket/Fream"
+	webcontext "github.com/adminoryuan/HyWebsocket/WebContext"
 )
 
 type wsCli struct {

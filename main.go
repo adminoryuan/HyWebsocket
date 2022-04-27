@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	ctx "github.com/Hywebsocket/WebContext"
+	ctx "github.com/adminoryuan/HyWebsocket/WebContext"
 )
 
 func main() {

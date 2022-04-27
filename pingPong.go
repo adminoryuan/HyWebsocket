@@ -3,7 +3,7 @@ package main
 import (
 	"io"
 
-	fream "github.com/Hywebsocket/Fream"
+	fream "github.com/adminoryuan/HyWebsocket/Fream"
 )
 
 func Pong(w io.Writer) {

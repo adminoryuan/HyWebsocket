@@ -1,3 +1,3 @@
-module github.com/Hywebsocket
+module github.com/adminoryuan/HyWebsocket
 
 go 1.17

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
-	fream "github.com/Hywebsocket/Fream"
+	fream "github.com/adminoryuan/HyWebsocket/Fream"
 )
 
 type WebsocketResp struct {
