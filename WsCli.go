@@ -1,12 +1,13 @@
 package main
 
 import (
-	fream "Hywebsocket/Fream"
-	webcontext "Hywebsocket/WebContext"
 	"fmt"
 	"io"
 	"net"
 	"sync"
+
+	fream "github.com/Hywebsocket/Fream"
+	webcontext "github.com/Hywebsocket/WebContext"
 )
 
 type wsCli struct {
@@ -47,7 +48,6 @@ func (c *wsCli) OnRead() {
 			fmt.Printf("%d", f.OpCode)
 			switch f.OpCode {
 			case 8:
-
 				c.conn.Close()
 				return
 			case 9:

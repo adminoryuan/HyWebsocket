@@ -1,7 +1,7 @@
 package fream
 
 import (
-	untity "Hywebsocket/untity"
+	untity "github.com/Hywebsocket/untity"
 )
 
 const (

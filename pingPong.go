@@ -1,8 +1,9 @@
 package main
 
 import (
-	fream "Hywebsocket/Fream"
 	"io"
+
+	fream "github.com/Hywebsocket/Fream"
 )
 
 func Pong(w io.Writer) {

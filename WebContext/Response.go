@@ -1,9 +1,10 @@
 package Webcontext
 
 import (
-	fream "Hywebsocket/Fream"
 	"encoding/json"
 	"io"
+
+	fream "github.com/Hywebsocket/Fream"
 )
 
 type WebsocketResp struct {

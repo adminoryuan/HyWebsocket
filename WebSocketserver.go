@@ -1,9 +1,10 @@
 package main
 
 import (
-	http "Hywebsocket/untity"
 	"fmt"
 	"net"
+
+	http "github.com/Hywebsocket/untity"
 )
 
 var HttpUntity http.HttpUntity = http.HttpUntity{}

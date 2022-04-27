@@ -1,8 +1,9 @@
 package main
 
 import (
-	ctx "Hywebsocket/WebContext"
 	"net"
+
+	ctx "github.com/Hywebsocket/WebContext"
 )
 
 type ReadEventFunc func(ctx.Context)
