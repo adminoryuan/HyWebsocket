@@ -1,4 +1,4 @@
-package main
+package HyWebsocket
 
 type OnConnFunc func(IWsCli)
 type OnCloseFunc func()
