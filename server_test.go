@@ -15,7 +15,7 @@ func TestServerTest(t *testing.T) {
 		ic.Write([]byte("heelo"))
 	})
 
-	h.onReadEvent(func(c ctx.Context) {
+	h.OnReadEvent(func(c ctx.Context) {
 		fmt.Printf("recv %s \n", string(c.Req.Bodys))
 		c.Resp.Write([]byte("zhangsan"))
 	})

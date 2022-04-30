@@ -39,7 +39,7 @@ func (h *hwebsocket) StartServer(port string) {
 }
 
 //收到消息触发回调
-func (h *hwebsocket) onReadEvent(fun ReadEventFunc) {
+func (h *hwebsocket) OnReadEvent(fun ReadEventFunc) {
 
 	h.ReadFunc = fun
 }

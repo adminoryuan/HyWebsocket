@@ -11,5 +11,5 @@ type Websocket interface {
 
 	OnClose()
 	//收到数据时事件
-	onReadEvent(fun ReadEventFunc)
+	OnReadEvent(fun ReadEventFunc)
 }
