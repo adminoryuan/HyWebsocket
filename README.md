@@ -14,6 +14,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/adminoryuan/HyWebsocket"
 	Webcontext "github.com/adminoryuan/HyWebsocket/WebContext"
@@ -21,47 +22,56 @@ import (
 
 func main() {
 	server := HyWebsocket.NewWebsocket()
-	//链接时的回调
+	var GloabConn sync.Map = sync.Map{}
+
 	server.OnConnect(func(ic HyWebsocket.IWsCli) {
+		GloabConn.Store(ic.GetRemoterAddr().String(), ic)
+		mes := ic.GetRemoterAddr().String()
+		GloabConn.Range(func(key, value interface{}) bool {
+			value.(HyWebsocket.IWsCli).Write([]byte(mes + "上线了"))
+			return true
+		})
 		fmt.Printf("收到 ：%s 的链接 \n", ic.GetRemoterAddr().String())
 	})
-	//接收到消息的回调
 	server.OnReadEvent(func(ctx Webcontext.Context) {
 		fmt.Printf("%s", string(ctx.Req.Bodys))
 	})
-	//启动服务
 	server.StartServer(":9999")
 }
 
 ```
 - 到此服务器已经启动成功
 ```客户端
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <div id="userList">
+        
 
+    </div>
 </head>
 <body>
     <button id="app">点击</button>
     <script>
-        console.log("asdsa")
+      
         
             var socket=new WebSocket('ws://127.0.0.1:9999')
             socket.onopen=function(){
-               alert("链接成功") 
+               // alert("链接成功") 
               
-                socket.send("你好")
+                socket.send("你好123123")
             }
             socket.close=function(){
                 alert("断开了链接")
             }
             socket.onmessage=function(res){
-                console.log(res.data)
-            //  socket.send("你好")
+               
+                alert(res.data)
+                //  socket.send("你好123123")
             }
             socket.onerror=function(){
                // alert("出错了")
@@ -70,7 +80,6 @@ func main() {
             
         var btn =document.getElementById("app")
         btn.onclick=function(){
-            alert("..")
             socket.close()
             
         }
