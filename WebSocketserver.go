@@ -10,8 +10,9 @@ import (
 var HttpUntity http.HttpUntity = http.HttpUntity{}
 
 type hwebsocket struct {
-	ConnFunc OnConnFunc
-	ReadFunc ReadEventFunc
+	ConnFunc  OnConnFunc
+	ReadFunc  ReadEventFunc
+	CloseFunc OnCloseFunc
 }
 
 func NewWebsocket() Websocket {
@@ -45,8 +46,8 @@ func (h *hwebsocket) OnReadEvent(fun ReadEventFunc) {
 }
 
 //断开链接触发回调
-func (h *hwebsocket) OnClose() {
-
+func (h *hwebsocket) OnClose(fun OnCloseFunc) {
+	h.CloseFunc = fun
 }
 
 //握手
