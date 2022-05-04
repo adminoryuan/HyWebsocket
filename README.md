@@ -91,5 +91,3 @@ func main() {
 ```
 
 - # 具体功能
- - #  OnConnect() 回调 返回一个链接对象
- - #  OnReadEvent(func(ctx Webcontext.Context))  //Context 描述了一个请求对象(客户端ip,信息消息体) 相应对象(json 等一些影响函数) 
